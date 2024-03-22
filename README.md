@@ -115,3 +115,10 @@ fn handle_connection(mut stream: TcpStream) {
 
 Bukti ScreenShot konten jika path tidak sesuai/tersedia
 ![Commit 3 screen capture](/assets/images/commit3failed.png)
+
+### Reflection Commit 4
+Pada commit ini, fungsi `handle_connection` dilakukan sedikit perubahan untuk bagian if elsenya. Penggunaan `match` digunakan untuk mencocokan nilai dari `request_line` dengan beberapa pola yang telah ditentukan, yaitu `/`, `/sleep`, dan tidak berpola. Endpoint baru yaitu `/sleep` dapat menunjukkan bagaimana server yang bersifat `single-threaded` dapat menangani request yang memerlukan waktu lebih lama untuk memproses. Pada endpoint ini, akan dijalankan `thread::sleep(Duration::from_secs(5));` untuk menunda pemrosesan selama 5 detik.
+
+Penggunaan `match` digunakan untuk mencocokan nilai dari `request_line` dengan beberapa pola yang telah ditentukan. Ketika `request_line` cocok dengan pola `/`, akan diproses sebagai request yang tidak memerlukan waktu lama. Ketika `request_line` cocok dengan pola `/sleep`, akan dijalankan `thread::sleep(Duration::from_secs(5));` untuk menunda pemrosesan selama 5 detik. Ketika `request_line` tidak cocok dengan pola apa pun, akan dianggap sebagai request yang tidak valid dan akan dibatalkan.
+
+Endpoint `/sleep` dapat menunjukkan bagaimana suatu website yang harus meresponse selama hanya beberapa detik namun menyebabkan penundaan ketika ingin membuat response lain. Penggunaan `single thread` dapat memakan waktu karena dapat memblokir pemrosesan request lain pada server. Ketika request ke `/sleep` diproses, ini menggambarkan bagaimana suatu website yang harus meresponse selama hanya beberapa detik namun menyebabkan penundaan ketika ingin membuat response lain.
