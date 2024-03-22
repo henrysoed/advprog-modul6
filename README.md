@@ -122,3 +122,10 @@ Pada commit ini, fungsi `handle_connection` dilakukan sedikit perubahan untuk ba
 Penggunaan `match` digunakan untuk mencocokan nilai dari `request_line` dengan beberapa pola yang telah ditentukan. Ketika `request_line` cocok dengan pola `/`, akan diproses sebagai request yang tidak memerlukan waktu lama. Ketika `request_line` cocok dengan pola `/sleep`, akan dijalankan `thread::sleep(Duration::from_secs(5));` untuk menunda pemrosesan selama 5 detik. Ketika `request_line` tidak cocok dengan pola apa pun, akan dianggap sebagai request yang tidak valid dan akan dibatalkan.
 
 Endpoint `/sleep` dapat menunjukkan bagaimana suatu website yang harus meresponse selama hanya beberapa detik namun menyebabkan penundaan ketika ingin membuat response lain. Penggunaan `single thread` dapat memakan waktu karena dapat memblokir pemrosesan request lain pada server. Ketika request ke `/sleep` diproses, ini menggambarkan bagaimana suatu website yang harus meresponse selama hanya beberapa detik namun menyebabkan penundaan ketika ingin membuat response lain.
+
+### Reflection Commit 5
+Untuk meningkatkan efisiensi sistem dengan menggunakan multithreading, perlu dibangun sebuah ThreadPool yang memungkinkan penanganan berbagai permintaan secara simultan. Setelah itu Worker dibuat untuk menerima dan menjalankan tugas yang spesifik yang dikirimkan untuk setiap permintaan.
+
+Untuk membuat ThreadPool, kita perlu membuat sebuah mekanisme pengiriman pesan. Di mana ThreadPool memiliki kemampuan untuk mengirim sinyal melalui sender ke receiver yang telah dikloning dan ditugaskan kepada setiap Worker. Ini memastikan bahwa ketika ThreadPool menerima permintaan untuk menjalankan sebuah tugas, sinyal akan dikirimkan melalui sender ke receiver pada Worker yang relevan, yang kemudian memproses job tersebut.
+
+Di dalam Worker, ada satu thread yang secara konsisten menunggu masuknya data. Setelah data diterima, Worker akan mengunci receiver untuk memproses data tersebut. Setelah proses selesai, lock pada receiver akan dilepaskan, memungkinkan Worker lain untuk menerima informasi dan menjalankan tugas berikutnya.
