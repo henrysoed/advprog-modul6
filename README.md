@@ -1,3 +1,5 @@
+# Modul 6
+
 ### Reflection Commit 1
 
 1. Mendengarkan Koneksi TCP:
@@ -22,3 +24,8 @@
 
 5. Interpretasi Permintaan:
 + Permintaan yang diprint mengandung beberapa baris, termasuk metode HTTP (misalnya, GET), jalur permintaan (misalnya, /), versi HTTP, header, dan informasi user-agent.
+
+### Reflection Commit 2
+Pada commit ini, fungsi `handle_connection` diperluas dengan beberapa tambahan kode. Sekarang, fungsi ini tidak hanya dapat membaca permintaan melalui stream TCP, tetapi juga dapat meresponsnya. Proses ini dilakukan dengan mengirim sebuah respons HTTP kepada client yang berisi konten `hello.html`.
+
+Proses respon dibuat dengan membuat status line respons yang menyatakan bahwa permintaan berhasil diproses dengan kode "200 OK". Kemudian, isi file `hello.html` dibaca dan panjang kontennya dihitung untuk disertakan dalam header respons. Respons HTTP yang lengkap, termasuk status line, header, dan konten, kemudian dibuat dan dikirim kembali ke client melalui stream yang sama.
